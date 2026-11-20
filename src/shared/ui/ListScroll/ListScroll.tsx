@@ -1,7 +1,7 @@
 import styles from './styles/ListScroll.module.css';
 import { useRef, useState } from "react";
 
-function ListScroll({ children }: { children: React.ReactNode }) {
+function ListScroll({ children, className = '' }: { children: React.ReactNode; className?: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const startX = useRef(0);
@@ -33,7 +33,7 @@ function ListScroll({ children }: { children: React.ReactNode }) {
     return (
         <div
             ref={containerRef}
-            className={styles.scroll}
+            className={`${styles.scroll} ${className}`}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}

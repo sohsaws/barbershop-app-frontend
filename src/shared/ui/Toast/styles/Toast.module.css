@@ -1,10 +1,14 @@
 @layer components {
   .toast {
     position: fixed;
-    right: 1rem;
-    bottom: calc(1rem + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(5rem + env(safe-area-inset-bottom));
     z-index: 60;
     max-width: min(22rem, calc(100vw - 2rem));
+    width: max-content;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
     padding: .75rem 1rem;
     border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
     border-radius: 1rem;

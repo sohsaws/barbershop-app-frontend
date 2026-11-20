@@ -13,6 +13,7 @@ import {
   useUploadAvatar,
 } from '@/features/edit-profile';
 import styles from './styles/Header.module.css';
+import { ErrorHandlingMassage } from '@/shared/lib/api-error/apiErrorHandling';
 
 function HeaderBarberSide() {
   const user = useUserStore((state) => state.user);
@@ -40,6 +41,7 @@ function HeaderBarberSide() {
 
   const handleDescriptionSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (updateDescription.isPending) return;
 
     const formData = new FormData(event.currentTarget);
     const description = String(formData.get('description') ?? '');
@@ -82,6 +84,9 @@ function HeaderBarberSide() {
         </label>
       </div>
 
+      {uploadAvatar.error && (
+        <p className={styles.error} role="alert">{ErrorHandlingMassage(uploadAvatar.error)}</p>
+      )}
       <p className={styles.name}>
         {profileName}
       </p>
@@ -146,6 +151,9 @@ function HeaderBarberSide() {
             <Check size={12} />
             Save
           </button>
+        )}
+        {updateDescription.error && (
+          <p className={styles.error} role="alert">{ErrorHandlingMassage(updateDescription.error)}</p>
         )}
       </form>
     </section>

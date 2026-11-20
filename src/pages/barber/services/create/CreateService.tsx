@@ -6,9 +6,11 @@ import { useCreateProvision } from '@/features/manage-service/model/use-create-p
 import { ErrorHandlingMassage } from '@/shared/lib/api-error/apiErrorHandling';
 import type { CreateProvisionSlotRequest } from '@/entities/provision/model/types';
 import type { CreateProvisionRequest } from '@/entities/provision/model/types';
+import { validateServicePhotoCount } from '@/features/manage-service/model/photoPolicy';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 
 function prepareServicePhotos(value: ServicePhotosValue): Pick<CreateProvisionRequest, 'avatar' | 'images'> {
-  if (value.photos.length === 0) throw new Error('Добавьте хотя бы одну фотографию услуги.');
+  validateServicePhotoCount(value.photos.length);
 
   const images = value.photos.map((photo) => {
     if (!photo.file) throw new Error('Выберите файлы фотографий перед созданием услуги.');
@@ -52,6 +54,7 @@ export default function CreateService() {
     try {
       const { avatar, images } = prepareServicePhotos(photos);
       await createProvision.mutateAsync({ title, description, categoryId, avatar, images, slots });
+      useToastStore.getState().showToast('Услуга создана');
       navigate('/barber-services', { replace: true });
     } catch (cause) {
       setError(ErrorHandlingMassage(cause));

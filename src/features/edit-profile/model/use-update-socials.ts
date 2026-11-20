@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 import {
   accountQueryKeys,
   accountService,
@@ -28,6 +29,7 @@ export function useUpdateSocials() {
         accountQueryKeys.profile(userId),
         (profile) => profile ? { ...profile, ...socials } : profile,
       );
+      useToastStore.getState().showToast('Контакты сохранены');
     },
   });
 }

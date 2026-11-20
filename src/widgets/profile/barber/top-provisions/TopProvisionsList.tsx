@@ -74,14 +74,10 @@ export function TopProvisionsList() {
       {provisions.map((provision) => (
         <ProvisionShortCard
           key={provision.id}
-          provisionId={provision.id}
-          title={provision.title}
+          provision={provision}
           price={fallbackPrice}
           time={fallbackTime}
-          categoryName={provision.provisionCategory?.name}
-          categoryImage={provision.provisionCategory?.image}
           iconPurpose='profile'
-          role={provision.user.role}
         />
       ))}
     </div>

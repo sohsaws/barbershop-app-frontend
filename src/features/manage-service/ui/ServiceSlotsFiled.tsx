@@ -1,6 +1,6 @@
 import { useId, useRef, useState, type SubmitEvent } from 'react';
 import { CalendarDays, Clock3, Plus, Trash2 } from 'lucide-react';
-import type { CreateProvisionSlotRequest } from '@/entities/provision/model/types';
+import type { ServiceSlotDraft } from '@/entities/provision/model/types';
 import { useModalStore } from '@/shared/lib/store/modalStore';
 import { Modal } from '@/shared/ui/Modal/Modal';
 import { ProfilePageDefaultButton } from '@/shared/ui/Buttons/profile-page-button';
@@ -11,8 +11,8 @@ import styles from './styles/ServiceSlotsFiled.module.css';
 
 interface ServiceSlotsProps {
   provisionId: number;
-  slots: CreateProvisionSlotRequest[];
-  onChange: (slots: CreateProvisionSlotRequest[]) => void;
+  slots: ServiceSlotDraft[];
+  onChange: (slots: ServiceSlotDraft[]) => void;
 }
 
 type PickerField = 'date' | 'startTime' | 'endTime';
@@ -113,6 +113,8 @@ export function ServiceSlots({ provisionId, slots, onChange }: ServiceSlotsProps
                       <time dateTime={slot.startTime} title={`До ${formatSlotTime(slot.endTime)}`}>{formatSlotTime(slot.startTime)}</time>
                       <button
                         type="button"
+                        disabled={slot.available === false}
+                        title={slot.available === false ? 'Слот занят' : undefined}
                         className={styles.remove}
                         aria-label={`Удалить слот ${formatSlotDate(group.date)} ${formatSlotTime(slot.startTime)}–${formatSlotTime(slot.endTime)}`}
                         onClick={() => onChange(slots.filter((entry) => entry !== slot))}

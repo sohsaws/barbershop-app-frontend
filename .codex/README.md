@@ -1,4 +1,4 @@
-﻿# Project agent tooling
+# Project agent tooling
 
 This project keeps its Codex configuration in `.codex/config.toml` and its project skills in `.agents/skills/`.
 
@@ -12,3 +12,7 @@ Sources:
 - OpenSpec source: https://github.com/sohsaws/OpenSpec (the published `@fission-ai/openspec@1.16.1` package is the same release).
 - Ponytail source: https://github.com/sohsaws/ponytail (the vendored 5.3.3 skills match the requested repository).
 - Codex example: https://github.com/sohsaws/web-app
+
+## Frontend testing
+
+Project-local Vitest and RTL skills are installed under .agents/skills. See [testing guide](../docs/testing.md) for commands and pinned skill sources. Project PostToolUse and Stop hooks are defined in hooks.json; review and trust them through /hooks in Codex before relying on automatic execution. They run test:check and never grant permissions or contact real APIs.

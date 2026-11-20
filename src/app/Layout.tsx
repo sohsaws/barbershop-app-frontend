@@ -4,6 +4,7 @@ import { ArrowLeft, Bell, Settings } from 'lucide-react';
 import BottomNav from '../shared/ui/BottomNav/BottomNav';
 import Logo from '../shared/ui/Logo/Logo';
 import { SocialLinksModal } from '../features/social-links';
+import { ToastHost } from '../shared/ui/Toast/Toast';
 
 const pageTitles: Record<string, string> = {
   '/': '',
@@ -17,7 +18,8 @@ function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const currentTitle = pageTitles[location.pathname];
+  const isEditingService = /^\/barber-services\/edit\/[^/]+\/?$/.test(location.pathname);
+  const currentTitle = isEditingService ? 'Edit service' : pageTitles[location.pathname];
   const isHomePage = location.pathname === '/';
 
   return (
@@ -27,7 +29,7 @@ function Layout() {
 					{!isHomePage && (
 						<button
 							type="button"
-							onClick={() => location.pathname === '/barber-services/create'
+							onClick={() => location.pathname === '/barber-services/create' || isEditingService
 								? navigate('/barber-services')
 								: navigate(-1)}
 							aria-label="Go back"
@@ -61,6 +63,7 @@ function Layout() {
 
 			<BottomNav />
 			<SocialLinksModal />
+			<ToastHost />
 		</div>
 	)
 }

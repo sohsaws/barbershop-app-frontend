@@ -43,3 +43,22 @@ Telegram Mini App для поиска услуг барбершопа и зап�
 - `npm run preview` позволяет проверить собранную production-версию локально.
 
 При сборке в Vercel переменные из Settings → Environment Variables имеют приоритет над env-файлами. Для Production укажите `VITE_USE_API_MOCKS=false` и актуальный `VITE_BASE_URL`, затем выполните новый деплой.
+
+## Редактирование услуг
+
+Целевой контракт сверяется с `../barbershop-app-backend-java`: чтение — `GET /api/provisions/{id}`, обновление — `PUT /api/provisions/update` с multipart-полями `id`, `title`, `description`, `provisionCategoryId` и необязательными файлами `avatar`, `images`. Слоты добавляются через `POST /api/provisions/add-slot` (`provisionId`, `startTime`, `endTime`), удаляются через `POST /api/provisions/remove-slot` (`slotId`).
+
+Проверка 2026-11-14: публичный Swagger целевого `https://barbershop-app-backend-java.onrender.com/api-docs` объявляет JSON для `/api/provisions/update` (avatar — строка URL) и multipart для `/api/provisions/{id}/images`. `/api/account/update-avatar` — отдельный multipart-запрос профиля. Пользователь подтвердил: сохранить единый multipart update по design, бэкенд будет обновлён отдельно. До этого обновления интеграционная проверка сохранения в опубликованный API остаётся открытой; фронтенд не переключается на JSON или create в качестве fallback. Старый адрес с суффиксом `-54t9` не является целевым сервером проекта.
+
+Редактор открывается по `/barber-services/edit/:id`, где ID берётся из объекта услуги, а не из ID пользователя. Владельцу и ADMIN доступна заполненная форма; остальные пользователи переходят к просмотру. Создание по `/barber-services/create` остаётся отдельным сценарием. Обновление не должно увеличивать количество услуг.
+
+При изменении только текста фотографии не отправляются повторно. При изменении галереи существующий файловый контракт требует подготовить весь итоговый набор, включая оставленные серверные фото; их скачивание требует CORS. Ошибка скачивания прерывает сохранение до записи. Слоты сохраняются отдельными запросами: общего атомарного сохранения нет. При сбое форма сохраняет черновик и перед повторной попыткой сверяет слоты с сервером, чтобы не дублировать успешно добавленные интервалы.
+
+### Проверки change service-cards-editing-and-carousel
+
+- `npm run test:service-edit` — проверки реального save-модуля через Vitest: сохранение галереи и аватарки, отказ скачивания, пустая галерея и сообщение о частичном сохранении.
+- `npm run test:check` — тестовый lint, проверка типов и unit-тесты. Настройка Vitest и AI-хуков: [docs/testing.md](docs/testing.md).
+- `node tests/service-edit.browser.mjs <путь-к-playwright-или-playwright-core/index.mjs>` — браузерный сценарий с временным Vite-сервером. Использует установленный отдельно browser harness и Chromium; сервер и браузер закрываются в `finally`. На этой машине: `node tests/service-edit.browser.mjs C:/PCbuilder/node_modules/playwright-core/index.mjs`.
+- Браузерный сценарий проверяет профиль и оба списка, переход в edit по ID, заполнение формы, PUT без create, сохранность черновика при 400/401/403/offline, повторный submit, сохранение галереи/аватарки, подтверждение удаления, пустое создание, invalid/missing ID, права viewer/ADMIN, empty/error списки и реальные методы mockApi.
+- Снимки и измерения: `Photos/service-cards-editing-and-carousel/verification.json`, `profile.png`, `edit.png` и восемь `home-<width>-scale-<scale>.png`. Ширины 360/430/1024/1440 px, scale .9/1: карточки 234/260 px, область карусели равна viewport, горизонтальной прокрутки документа нет. Проверены hover, видимый клавиатурный фокус и reduced-motion.
+- Браузерный тест подменяет ответы API и фото контролируемыми fixtures (фото на снимках — одноцветные тестовые изображения), не изменяя env-файлы. Это проверка UI/контракта запросов, а не успешная запись в опубликованный Java API. Проверка полного цикла с целевым сервером и реальным хранилищем пока не выполнена.

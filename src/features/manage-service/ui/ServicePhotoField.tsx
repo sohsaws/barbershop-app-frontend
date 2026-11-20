@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Camera, MoreHorizontal, Trash2 } from 'lucide-re
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { Modal } from '@/shared/ui/Modal/Modal';
-import { Toast } from '@/shared/ui/Toast/Toast';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 
 export interface ServicePhoto { url: string; file?: File }
 export interface ServicePhotosValue { photos: ServicePhoto[]; avatarUrl: string }
@@ -33,7 +33,6 @@ export function ServicePhotoField({ photoUrls = [], avatarUrl, onChange }: Servi
   const [error, setError] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isToastOpen, setIsToastOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const ownedUrls = useRef(new Set<string>());
@@ -72,7 +71,7 @@ export function ServicePhotoField({ photoUrls = [], avatarUrl, onChange }: Servi
   };
 
   const goTo = (direction: number) => { setGallery((current) => ({ ...current, direction, index: (current.index + direction + current.photos.length) % current.photos.length })); setError(''); };
-  const makeAvatar = () => { if (!activePhoto) return; setGallery({ ...gallery, avatarUrl: activePhoto.url }); onChange?.({ photos: gallery.photos, avatarUrl: activePhoto.url }); setIsMenuOpen(false); setIsToastOpen(true); };
+  const makeAvatar = () => { if (!activePhoto) return; setGallery({ ...gallery, avatarUrl: activePhoto.url }); onChange?.({ photos: gallery.photos, avatarUrl: activePhoto.url }); setIsMenuOpen(false); useToastStore.getState().showToast('Аватарка услуги изменена'); };
   const deleteActivePhoto = () => {
     if (!activePhoto) return;
     const photos = gallery.photos.filter((_, index) => index !== gallery.index);
@@ -92,7 +91,6 @@ export function ServicePhotoField({ photoUrls = [], avatarUrl, onChange }: Servi
       </>}
     </div>
     {error && <p className={styles.error} role="alert">{error}</p>}
-    <Toast message="Аватарка услуги изменена" isOpen={isToastOpen} onClose={() => setIsToastOpen(false)} />
     <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Удалить изображение?"><p className={styles.confirmText}>Вы уверены?</p><div className={styles.confirmActions}><button type="button" className={styles.confirmNo} onClick={() => setIsDeleteModalOpen(false)}>Нет</button><button type="button" className={styles.confirmYes} onClick={deleteActivePhoto}>Да</button></div></Modal>
   </section>;
 }

@@ -123,5 +123,9 @@
     .openButton:hover {
       background-color: var(--color-accent-hover);
     }
+    .openButton:hover svg { opacity: .75; }
   }
+  .openButton svg { transition: opacity 150ms ease; }
+  .openButton:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) { .openButton svg { transition: none; } }
 }

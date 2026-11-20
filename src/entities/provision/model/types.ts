@@ -35,6 +35,20 @@ export interface CreateProvisionSlotRequest {
   endTime: string;
 }
 
+export interface ServiceSlotDraft extends CreateProvisionSlotRequest {
+  id?: number;
+  available?: boolean;
+}
+
+export interface UpdateProvisionRequest {
+  id: number;
+  title?: string;
+  description?: string;
+  provisionCategoryId?: number;
+  avatar?: File;
+  images?: File[];
+}
+
 export interface CreateProvisionRequest {
   title: string;
   description: string;

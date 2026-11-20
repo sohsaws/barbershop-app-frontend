@@ -4,22 +4,23 @@ import HomePageButton from '@/shared/ui/Buttons/home-button';
 import { ServiceCategoryField } from './ServiceCategoryField';
 import { ServicePhotoField, type ServicePhotosValue } from './ServicePhotoField';
 import { useState, type SubmitEvent } from 'react';
-import type { CreateProvisionSlotRequest } from '@/entities/provision/model/types';
+import type { ServiceSlotDraft } from '@/entities/provision/model/types';
 import { ServiceSlots } from './ServiceSlotsFiled';
 
 export interface ServiceFormValues {
+  provisionId?: number;
   title?: string;
   description?: string;
   categoryId?: number;
   photoUrls?: string[];
   avatarUrl?: string;
-  slots?: CreateProvisionSlotRequest[];
+  slots?: ServiceSlotDraft[];
 }
 
 interface ServiceFormProps {
   initialValues?: ServiceFormValues;
   submitText: string;
-  onSubmit: (event: SubmitEvent<HTMLFormElement>, slots: CreateProvisionSlotRequest[]) => void;
+  onSubmit: (event: SubmitEvent<HTMLFormElement>, slots: ServiceSlotDraft[]) => void;
   onPhotosChange?: (value: ServicePhotosValue) => void;
   isSubmitting?: boolean;
   error?: string;
@@ -38,8 +39,8 @@ export function ServiceForm({
   isSubmitting = false,
   error,
 }: ServiceFormProps) {
-  const [provisionId] = useState(() => initialValues?.slots?.[0]?.provisionId ?? createDraftProvisionId());
-  const [slots, setSlots] = useState<CreateProvisionSlotRequest[]>(() => initialValues?.slots ?? []);
+  const [provisionId] = useState(() => initialValues?.provisionId ?? initialValues?.slots?.[0]?.provisionId ?? createDraftProvisionId());
+  const [slots, setSlots] = useState<ServiceSlotDraft[]>(() => initialValues?.slots ?? []);
 
   return (
     <form aria-busy={isSubmitting} onSubmit={(event) => onSubmit(event, slots)}>

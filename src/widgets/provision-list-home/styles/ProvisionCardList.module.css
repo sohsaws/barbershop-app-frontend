@@ -10,6 +10,13 @@
     margin-bottom: 2.5rem;
   }
 
+  .carousel {
+    width: calc(100vw / var(--ui-scale));
+    margin-inline-start: calc((100% - 100vw / var(--ui-scale)) / 2);
+    padding-inline: max(1rem, calc((100vw / var(--ui-scale) - var(--width-app)) / 2 + 1rem));
+    box-sizing: border-box;
+  }
+
   .header {
     justify-content: space-between;
     padding-block: 1rem;

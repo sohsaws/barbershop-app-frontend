@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 import styles from './styles/Toast.module.css';
 
 interface ToastProps {
@@ -16,5 +18,10 @@ export function Toast({ message, isOpen, onClose, duration = 2400 }: ToastProps)
   }, [duration, isOpen, onClose]);
 
   if (!isOpen) return null;
-  return <div className={styles.toast} role="status" aria-live="polite">{message}</div>;
+  return createPortal(<div className={styles.toast} role="status" aria-live="polite">{message}</div>, document.body);
+}
+
+export function ToastHost() {
+  const { message, id, closeToast } = useToastStore();
+  return <Toast key={id} message={message ?? ''} isOpen={message !== null} onClose={closeToast} />;
 }

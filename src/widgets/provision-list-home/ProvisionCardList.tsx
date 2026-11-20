@@ -37,7 +37,7 @@ function ProvisionCardList() {
           <SeeAll route="/" />
         </div>
       </div>
-      <ListScroll>
+      <ListScroll className={styles.carousel}>
         {provisions?.map((provision) => (
           <ProvisionCard key={provision.id} provision={provision} />
         ))}

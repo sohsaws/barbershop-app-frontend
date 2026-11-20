@@ -7,6 +7,7 @@ import ProfilePage from '../pages/profile/ProfilePage';
 import ServiceDetailPage from '../pages/provisions/ServiceDetailPage';
 import BarberServicesPage from '../pages/barber/services/BarberServicesPage';
 import CreateService from '../pages/barber/services/create/CreateService';
+import EditService from '../pages/barber/services/edit/EditService';
 import NotFoundPage from '../pages/not-found/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -35,7 +36,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, Component: BarberServicesPage },
           { path: 'create', Component: CreateService },
-          // { path: 'edit/:id', Component: }
+          { path: 'edit/:id', Component: EditService },
         ],
       },
       {

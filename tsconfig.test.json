@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.test.tsbuildinfo",
+    "types": ["vite/client", "node"],
+    "allowJs": true
+  },
+  "include": ["tests/**/*.ts", "src/**/*.d.ts", "vitest.config.ts", "vite.config.ts", ".codex/hooks/test-check.mjs"]
+}

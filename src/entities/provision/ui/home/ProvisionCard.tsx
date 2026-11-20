@@ -38,6 +38,8 @@ function ProvisionCard({ provision }: { provision: ProvisionResponse }) {
             </div>
 
             <button
+              type="button"
+              aria-label={`Open ${provision.title}`}
               onClick={() => navigate(`/provisions/${provision.id}`)}
               className={styles.openButton}
             >

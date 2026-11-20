@@ -131,4 +131,12 @@
   .submit {
     padding-top: .5rem;
   }
+
+  .error {
+    color: var(--color-bg-cancel);
+    font-size: .875rem;
+    line-height: 1.45;
+    margin-bottom: .75rem;
+    overflow-wrap: anywhere;
+  }
 }

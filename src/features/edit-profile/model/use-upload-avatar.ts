@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 import {
   accountQueryKeys,
   accountService,
@@ -68,6 +69,7 @@ export function useUploadAvatar() {
           ? { ...profile, photoUrl: photoUrl }
           : profile,
       );
+      useToastStore.getState().showToast('Фото профиля сохранено');
     },
     onError: (_error, _file, context) => {
       if (!context) return;

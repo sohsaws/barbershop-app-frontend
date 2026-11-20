@@ -31,6 +31,10 @@
   .backLink {
     color: var(--color-text-primary);
   }
+  .backLink svg { transition: opacity 150ms ease; }
+  .backLink:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: 4px; }
+  @media (hover: hover) { .backLink:hover svg { opacity: .75; } }
+  @media (prefers-reduced-motion: reduce) { .backLink svg { transition: none; } }
 
   .title {
     color: var(--color-text-primary);

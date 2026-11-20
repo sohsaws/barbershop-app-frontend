@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useToastStore } from '@/shared/lib/store/toastStore';
 import {
   accountQueryKeys,
   accountService,
@@ -33,6 +34,7 @@ export function useUpdateDescription() {
         accountQueryKeys.profile(userId),
         (profile) => profile ? { ...profile, description } : profile
       );
+      useToastStore.getState().showToast('Описание сохранено');
     },
   });
 }

@@ -1,0 +1,30 @@
+{
+  "description": "Frontend test checks after relevant edits and before finishing; unchanged passing content is cached.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "node --input-type=commonjs -e \"const cp=require('node:child_process');const u=require('node:url');const root=cp.execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim();import(u.pathToFileURL(root+'/.codex/hooks/test-check.mjs').href).then(m=>m.main())\"",
+            "timeout": 120,
+            "type": "command",
+            "statusMessage": "Checking frontend tests, types and test lint"
+          }
+        ],
+        "matcher": "^(apply_patch|Edit|Write)$"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "node --input-type=commonjs -e \"const cp=require('node:child_process');const u=require('node:url');const root=cp.execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim();import(u.pathToFileURL(root+'/.codex/hooks/test-check.mjs').href).then(m=>m.main())\"",
+            "timeout": 120,
+            "type": "command",
+            "statusMessage": "Checking frontend tests, types and test lint"
+          }
+        ]
+      }
+    ]
+  }
+}

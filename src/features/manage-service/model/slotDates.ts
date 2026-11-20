@@ -1,4 +1,4 @@
-import type { CreateProvisionSlotRequest } from '@/entities/provision/model/types';
+import type { CreateProvisionSlotRequest, ServiceSlotDraft } from '@/entities/provision/model/types';
 
 export function localDateKey(date: Date): string {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
@@ -12,8 +12,8 @@ export function formatSlotTime(value: string): string {
   return new Date(value).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
-export function groupSlots(slots: CreateProvisionSlotRequest[]) {
-  const groups = new Map<string, CreateProvisionSlotRequest[]>();
+export function groupSlots(slots: ServiceSlotDraft[]) {
+  const groups = new Map<string, ServiceSlotDraft[]>();
   for (const slot of slots) {
     const date = localDateKey(new Date(slot.startTime));
     const group = groups.get(date);
